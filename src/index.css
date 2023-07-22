@@ -1,0 +1,171 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: rgb(255, 255, 255);
+    font-family: "Nunito Sans", sans-serif;
+    font-family: "Varela", sans-serif;
+    font-family: "Work Sans", sans-serif;
+    overflow-x: hidden;
+}
+h1,
+h2,
+h3,
+h4,
+span,
+div,
+p {
+    font-family: "Work Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.logo {
+    height: 100%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.dynamic {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding: 50px; */
+    width: 100%;
+    /* max-width: 1000px; */
+    z-index: 0;
+    min-height: calc(100vh - 180px);
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    width: 100%;
+    max-width: 1000px;
+    background-color: transparent;
+    box-sizing: border-box;
+    border-radius: 20px;
+    margin-block: 50px;
+    padding-inline: 20px;
+}
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    /* font-family: "Nunito Sans", sans-serif; */
+}
+.subheader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    /* font-family: "Nunito Sans", sans-serif; */
+    color: gray;
+}
+.input {
+    padding: 20px;
+    font-size: 20px;
+    border: 1px solid white;
+    box-sizing: border-box;
+    width: 100%;
+    font-family: "Work Sans", sans-serif;
+    border-bottom: 2px solid gainsboro;
+    transition: all linear 0.15s;
+    border-radius: 0px;
+}
+.button {
+    border: none;
+    width: 100%;
+    padding-block: 20px;
+    border-radius: 0.5em;
+    box-sizing: border-box;
+    font-family: "Work Sans", sans-serif;
+    transition: all linear 0.15s;
+    z-index: 10;
+    /* box-shadow: 3px 3px 5px 0px rgb(121, 103, 103); */
+}
+.img-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 40vh;
+}
+.header-img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    filter: brightness(40%);
+}
+.img-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    color: white;
+    font-size: 60px;
+    gap: 20px;
+    text-shadow: 3px 3px 3px rgb(69, 69, 69);
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.input:focus {
+    outline: none;
+    border-bottom: 2px solid rgb(156, 168, 224);
+    background-color: rgb(242, 242, 242);
+}
+.button:hover {
+    filter: brightness(200%);
+    cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+    .header {
+        font-size: 40px;
+    }
+    .subheader {
+        font-size: 15px;
+    }
+    .input {
+        font-size: 15px;
+        padding-block: 15px;
+        width: 80%;
+    }
+    .button {
+        padding-block: 15px;
+        width: 80%;
+    }
+    .content {
+        border-radius: 0px;
+    }
+}
+
+@media (max-width: 800px) {
+    .dynamic {
+        flex-direction: column;
+    }
+    .img-header {
+        flex-direction: column;
+    }
+    .container {
+        /* padding: 20px; */
+    }
+}

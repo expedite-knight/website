@@ -1,0 +1,6 @@
+FROM node:19-bullseye-slim
+WORKDIR /expedite_knight_frontend
+COPY package.json .
+RUN npm install
+COPY . .
+CMD ["npm", "start"]

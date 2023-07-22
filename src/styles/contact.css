@@ -1,0 +1,27 @@
+.contact--header-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+.contact--quote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+}
+.contact--checkboxes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+@media (max-width: 800px) {
+    .contact--checkboxes {
+        flex-direction: column;
+        gap: 20px;
+    }
+}

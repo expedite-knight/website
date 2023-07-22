@@ -1,0 +1,104 @@
+.home--cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-block: 20px;
+    border-block: 2px solid gainsboro;
+}
+.home--logo {
+    margin-top: -30px;
+    width: 80%;
+}
+.home--card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: center;
+    border-radius: 20px;
+    gap: 10px;
+    min-height: 130px;
+    min-width: 130px;
+    max-height: 130px;
+    max-width: 100%;
+}
+.home--card-header {
+    text-align: center;
+    font-weight: 1200;
+    font-size: 25px;
+    width: 100%;
+    color: gainsboro;
+    /* border-bottom: 1px solid black; */
+}
+.home--card-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 70px;
+    color: gainsboro;
+    /* border: 3px solid gainsboro; */
+    border-radius: 100px;
+    padding: 10px;
+}
+.home--buttons {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    box-sizing: border-box;
+    width: 80%;
+}
+.home--button {
+    padding-inline: 10px;
+    font-size: 20px;
+    /* box-shadow: 2px 2px 10px 0px rgb(227, 227, 227); */
+}
+.home--img {
+    width: 45%;
+}
+
+@media (max-width: 1000px) {
+    .home--button {
+        font-size: 18px;
+    }
+    .home--card-header {
+        font-size: 25px;
+    }
+    .home--logo {
+        width: 80%;
+    }
+}
+
+@media (max-width: 800px) {
+    .home--button {
+        font-size: 18px;
+        width: 100%;
+    }
+    .home--buttons {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-block: 10px;
+        border-block: 2px solid white;
+        padding-block: 20px;
+    }
+    .home--card-header {
+        font-size: 25px;
+    }
+    .home--img {
+        width: 100%;
+    }
+    .home--content {
+        width: 100%;
+        height: fit-content;
+        gap: 100px;
+    }
+    .home--logo {
+        width: 100%;
+    }
+    .home--cards {
+        margin-inline: 20%;
+        gap: 30px;
+    }
+}

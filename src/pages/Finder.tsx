@@ -17,10 +17,13 @@ const Finder = ({ menuState }: Props) => {
     const [userInput, setUserInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [isActive, setIsActive] = useState(false);
     const { REACT_APP_API_URL } = process.env;
+    const queryParams = new URLSearchParams(window.location.search);
 
     const fetchLocation = () => {
         if (routeId) {
+            console.log("fetching: ", routeId)
             setLoading(true);
             fetch(`${REACT_APP_API_URL}/api/v1/routes/location`, {
                 method: "POST",
@@ -42,6 +45,43 @@ const Finder = ({ menuState }: Props) => {
                         setDestination(
                             data.body.route.destination.replaceAll(" ", "+")
                         );
+                        setIsActive(true);
+                        setError(false);
+                    } else {
+                        setError(true);
+                    }
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.log("ERROR:", error);
+                    setError(true);
+                    setLoading(false);
+                    setRouteId(null);
+                });
+        } else if(queryParams.has("route")) {
+            setRouteId(queryParams.get("route"));
+            setLoading(true);
+            fetch(`${REACT_APP_API_URL}/api/v1/routes/location`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    routeId: queryParams.get("route"),
+                }),
+            })
+                .then((res) => res.json())
+                .then(async (data) => {
+                    if (data.status === 200) {
+                        setTargetLocation({
+                            lat: data.body.route.activeLocation.lat,
+                            long: data.body.route.activeLocation.long,
+                        });
+                        setDestination(
+                            data.body.route.destination.replaceAll(" ", "+")
+                        );
+                        setIsActive(true);
                         setError(false);
                     } else {
                         setError(true);
@@ -58,7 +98,7 @@ const Finder = ({ menuState }: Props) => {
     };
 
     useEffect(() => {
-        if (routeId) {
+        if (routeId || queryParams.has("route")) {
             fetchLocation();
         }
         const interval = setInterval(() => {
@@ -100,9 +140,9 @@ const Finder = ({ menuState }: Props) => {
                     }}
                 >
                     <h3 className="header">Route ID:</h3>
-                    <small style={{ color: error ? "red" : "white" }}>
-                        Unable to find route
-                    </small>
+                    {/* <small style={{ color: "red", display: error ? "inline" : "none" }}>
+                        Unable to find route or route is inactive
+                    </small> */}
                     <input
                         className="input"
                         placeholder="Ex: 64970caf5c13229e1adf11a0"
@@ -152,12 +192,20 @@ const Finder = ({ menuState }: Props) => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        flexDirection: "column",
+                        gap: 10
                     }}
                 >
+                    <div style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5}}>
+                        {routeId && <h4>Status:</h4>}
+                        {isActive && <h4 style={{color: "#03c04a", background: "#AFE1AF", paddingInline: 10, paddingBlock: 5, borderRadius: 5}}>Active</h4>}
+                        {!isActive && error ? <h4 style={{color: "#de3623", background: "pink", paddingInline: 10, paddingBlock: 5, borderRadius: 5}}>Inactive</h4> : null}
+                    </div>
+
                     <iframe
                         title="Package location map"
-                        width="600"
-                        height="300"
+                        width="1000"
+                        height="500"
                         frameBorder="0"
                         src={`https://www.google.com/maps/embed/v1/directions?key=${process.env.REACT_APP_GOOGLE_API_KEY}&origin=${targetLocation.lat}%2C${targetLocation.long}&destination=${destination}&zoom=10`}
                         allowFullScreen

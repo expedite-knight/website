@@ -17,7 +17,7 @@ const Home = ({ menuState }: Props) => {
         <div className="container" style={{ zIndex: menuState ? "-1" : "0" }}>
             <div className="content">
                 <section className="dynamic">
-                    <img src="assets/EK_logo.png" className="home--logo" />
+                    <img src="assets/EK_logo.png" className="home--logo" placeholder="image not available"/>
                     <section className="home--buttons">
                         <Link
                             className="button home--button"

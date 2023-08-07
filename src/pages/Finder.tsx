@@ -202,14 +202,15 @@ const Finder = ({ menuState }: Props) => {
                         {!isActive && error ? <h4 style={{color: "#de3623", background: "pink", paddingInline: 10, paddingBlock: 5, borderRadius: 5}}>Inactive</h4> : null}
                     </div>
 
+                    <div className="iframe-container">
                     <iframe
                         title="Route location map"
-                        width="600"
-                        height="300"
+                        className="responsive-iframe"
                         frameBorder="0"
                         src={`https://www.google.com/maps/embed/v1/directions?key=${process.env.REACT_APP_GOOGLE_API_KEY}&origin=${targetLocation.lat}%2C${targetLocation.long}&destination=${destination}&zoom=10`}
                         allowFullScreen
                     ></iframe>
+                    </div>
                 </div>
 
                 <div style={{ textAlign: "center" }}>

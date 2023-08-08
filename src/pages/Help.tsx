@@ -29,6 +29,7 @@ const Help = ({ menuState }: Props) => {
             <section className="content">
                 <section className="help--question">
                     <h2 className="help--title">How do I sign up for SMS?</h2>
+                    <div style={{background: "#d92323", height: "2px", width: "50px", marginBottom: "-5px"}}></div>
                     <p className="help--body">
                         You can sign up for SMS by texting "verify" to +1
                         704-686-8257 and that will allow UpdateMe to send you an
@@ -48,6 +49,7 @@ const Help = ({ menuState }: Props) => {
                     <h2 className="help--title">
                         How do I remove myself from a route?
                     </h2>
+                    <div style={{background: "#d92323", height: "2px", width: "50px", marginBottom: "-5px"}}></div>
                     <p className="help--body">
                         If you think you have been added to a route by mistake
                         you can send the route id to the same number you got the
@@ -63,6 +65,7 @@ const Help = ({ menuState }: Props) => {
                 ></div>
                 <section className="help--question">
                     <h2 className="help--title">How do I stop SMS messages?</h2>
+                    <div style={{background: "#d92323", height: "2px", width: "50px", marginBottom: "-5px"}}></div>
                     <p className="help--body">
                         If you no longer want to receive SMS updates you can
                         text "unverify" to the same number you have been
@@ -80,6 +83,7 @@ const Help = ({ menuState }: Props) => {
                     <h2 className="help--title">
                         Who will be delivering my package
                     </h2>
+                    <div style={{background: "#d92323", height: "2px", width: "50px", marginBottom: "-5px"}}></div>
                     <p className="help--body">
                         Both Terry and Kai deliver depending on availability and
                         distance

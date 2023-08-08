@@ -31,6 +31,7 @@ const About = ({ menuState }: Props) => {
                             <h3 className="about--name">Field Technician</h3>
                         </span>
                     </div>
+                    <div style={{background: "#d92323", height: "2px", width: "50px", marginBottom: "-5px"}}></div>
                     <p className="about--bio">
                         My name is Terry and a 10 year veteran of the U.S. Navy
                         and 20 years of working on medical linear accelerators.
@@ -64,6 +65,7 @@ const About = ({ menuState }: Props) => {
                             <h3 className="about--name">Software Engineer</h3>
                         </span>
                     </div>
+                    <div style={{background: "#d92323", height: "2px", width: "50px", marginBottom: "-5px"}}></div>
                     <p className="about--bio">
                         My name is Kai and I am a recent Illinois State
                         University grad who now builds applications full time.

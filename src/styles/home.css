@@ -2,9 +2,10 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 40px;
     padding-block: 20px;
-    border-block: 2px solid gainsboro;
+    margin-bottom: 20px;
+    /* border-block: 2px solid gainsboro; */
 }
 .home--logo {
     margin-top: -30px;
@@ -17,7 +18,7 @@
     background-color: white;
     align-items: center;
     border-radius: 20px;
-    gap: 10px;
+    gap: 20px;
     min-height: 130px;
     min-width: 130px;
     max-height: 130px;
@@ -28,7 +29,7 @@
     font-weight: 1200;
     font-size: 25px;
     width: 100%;
-    color: gainsboro;
+    color: black;
     /* border-bottom: 1px solid black; */
 }
 .home--card-body {
@@ -37,10 +38,10 @@
     justify-content: center;
     font-weight: 600;
     font-size: 70px;
-    color: gainsboro;
-    /* border: 3px solid gainsboro; */
+    color: gray;
+    border: 3px solid gainsboro;
     border-radius: 100px;
-    padding: 10px;
+    padding: 20px;
 }
 .home--buttons {
     display: flex;
@@ -56,6 +57,24 @@
 }
 .home--img {
     width: 45%;
+}
+.home--reviews {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.home--review{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 20px;
+}
+.home--review-body{
+}
+.home--review-date{
+    color: gainsboro;
 }
 
 @media (max-width: 1000px) {
@@ -97,8 +116,27 @@
     .home--logo {
         width: 100%;
     }
+    .home--card{
+        gap: 10px
+    }
     .home--cards {
         margin-inline: 20%;
-        gap: 30px;
+        gap: 60px;
     }
+    .home--reviews{
+        flex-direction: column;
+        gap: 40px;
+    }
+    .home--review{
+        justify-content: center;
+        align-items: center;
+    }
+    .home--review-body{
+        text-align: center;
+    }
+}
+
+.home--review:hover {
+    background-color: rgba(217, 35, 35, .05);
+    cursor: pointer;
 }

@@ -254,7 +254,7 @@ const Reviews = ({ menuState }: Props) => {
             }}
           />
           <p>
-            page {page} of {totalPages}
+            page {page} of {totalPages < 1 ? 1 : totalPages}
           </p>
           <HiArrowRight
             size={20}

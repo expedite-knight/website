@@ -145,11 +145,9 @@ const Reviews = ({ menuState }: Props) => {
         </AnimatePresence>
       </section>
       <div className="review-overall">
-        <h2 style={{ textAlign: "center", fontSize: "2em" }}>
-          Overall Rating:
-        </h2>
+        <h2 style={{ textAlign: "center", fontSize: "2em" }}>Overall Rating</h2>
         <h2>
-          {averageRating && (
+          {averageRating ? (
             <div className="home--review-ratings">
               <LiaStar
                 color={Math.round(averageRating) >= 1 ? "gold" : "gainsboro"}
@@ -171,6 +169,14 @@ const Reviews = ({ menuState }: Props) => {
                 color={Math.round(averageRating) >= 5 ? "gold" : "gainsboro"}
                 size={45}
               />
+            </div>
+          ) : (
+            <div className="home--review-ratings">
+              <LiaStar color={"gainsboro"} size={45} />
+              <LiaStar color={"gainsboro"} size={45} />
+              <LiaStar color={"gainsboro"} size={45} />
+              <LiaStar color={"gainsboro"} size={45} />
+              <LiaStar color={"gainsboro"} size={45} />
             </div>
           )}
         </h2>

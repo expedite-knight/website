@@ -35,16 +35,20 @@ const Reviews = ({ menuState }: Props) => {
   const [submitSuccessful, setSubmitSuccessful] = useState(false);
   const [popupState, setPopupState] = useState(false);
   const [averageRating, setAverageRating] = useState<number | null>(null);
+  const [filterValue, setFilterValue] = useState(0);
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${REACT_APP_API_URL}/api/v1/reviews?page=${page}`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `${REACT_APP_API_URL}/api/v1/reviews?page=${page}&filter=${filterValue}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
       .then(async (data) => {
         setReviews(data.body.reviews);
@@ -60,7 +64,7 @@ const Reviews = ({ menuState }: Props) => {
       .catch((error) => {
         console.log("ERROR:", error);
       });
-  }, [page, update]);
+  }, [page, update, filterValue]);
 
   function validateInputs() {
     if (!anon && name.trim() === "") {
@@ -148,7 +152,10 @@ const Reviews = ({ menuState }: Props) => {
         <h2 style={{ textAlign: "center", fontSize: "2em" }}>Overall Rating</h2>
         <h2>
           {averageRating ? (
-            <div className="home--review-ratings">
+            <div
+              className="home--review-ratings"
+              title={JSON.stringify(Math.round(averageRating * 100) / 100)}
+            >
               <LiaStar
                 color={Math.round(averageRating) >= 1 ? "gold" : "gainsboro"}
                 size={45}
@@ -188,6 +195,21 @@ const Reviews = ({ menuState }: Props) => {
         </small>
       </div>
       <div className="break"></div>
+      <div className="review-filter-container">
+        <small>Filter by rating:</small>
+        <select
+          className="review-filter"
+          onChange={(e) => setFilterValue(JSON.parse(e.target.value))}
+          defaultValue={filterValue}
+        >
+          <option value={0}>All</option>
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+        </select>
+      </div>
       <section className="content">
         {loading ? (
           <FadeLoader height={10} width={4} color="gainsboro" />

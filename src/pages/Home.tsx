@@ -18,7 +18,10 @@ type Props = {
   menuState: boolean;
 };
 
+const localIP = "172.16.225.61";
+
 const Home = ({ menuState }: Props) => {
+  const { REACT_APP_API_URL } = process.env;
   const control = useAnimation();
   const [ref, inView] = useInView();
   const [moreReviewsButtonHover, setMoreReviewsButtonHover] = useState(false);
@@ -45,6 +48,23 @@ const Home = ({ menuState }: Props) => {
       createdAt: new Date().getTime(),
     },
   ]);
+
+  useEffect(() => {
+    fetch(`${"http://172.16.225.61:8082"}/api/v1/reviews/favorites`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(async (data) => {
+        setReviews(data.body.reviews);
+      })
+      .catch((error) => {
+        console.log("ERROR:", error);
+      });
+  }, []);
 
   useEffect(() => {
     if (inView) {
@@ -113,9 +133,9 @@ const Home = ({ menuState }: Props) => {
             key="reviews"
             ref={ref}
           >
-            {reviews.map((review) => {
+            {reviews.map((review, index) => {
               return (
-                <div className="home--review">
+                <div className="home--review" key={index}>
                   <h1>{review.anon ? "Anonymous" : review.name}</h1>
                   <div className="home--review-ratings">
                     <LiaStar

@@ -16,6 +16,13 @@
     gap: 10px;
     width: 80%;
 }
+.review-filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    margin-top: 2em;
+}
 .review--body{
     
 }

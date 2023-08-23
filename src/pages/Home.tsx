@@ -105,7 +105,7 @@ const Home = ({ menuState }: Props) => {
             </Link>
           </section>
         </section>
-        {reviews.length <= 0 && (
+        {reviews?.length <= 0 && (
           <FadeLoader height={10} width={4} color="gainsboro" />
         )}
         <AnimatePresence>

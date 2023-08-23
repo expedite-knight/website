@@ -13,44 +13,28 @@ import { BsArrowRight } from "react-icons/bs";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAnimation } from "framer-motion";
 import { useInView } from "@react-spring/web";
+import { ClipLoader, FadeLoader } from "react-spinners";
 
 type Props = {
   menuState: boolean;
 };
-
-const localIP = "172.16.225.61";
+type ReviewType = {
+  rating: number;
+  name: string;
+  body: string;
+  anon: boolean;
+  updatedAt: number;
+};
 
 const Home = ({ menuState }: Props) => {
   const { REACT_APP_API_URL } = process.env;
   const control = useAnimation();
   const [ref, inView] = useInView();
   const [moreReviewsButtonHover, setMoreReviewsButtonHover] = useState(false);
-  const [reviews, setReviews] = useState([
-    {
-      rating: 5,
-      anon: true,
-      name: "",
-      body: "Best experience ive ever had with an expedite company",
-      createdAt: new Date().getTime(),
-    },
-    {
-      rating: 4,
-      anon: false,
-      name: "Jim Walsh",
-      body: "It was quick and painlesss, I loved getting the sms updates ",
-      createdAt: new Date().getTime(),
-    },
-    {
-      rating: 5,
-      anon: false,
-      name: "Ben Johnson",
-      body: "",
-      createdAt: new Date().getTime(),
-    },
-  ]);
+  const [reviews, setReviews] = useState<[ReviewType] | []>([]);
 
   useEffect(() => {
-    fetch(`${"http://172.16.225.61:8082"}/api/v1/reviews/favorites`, {
+    fetch(`${REACT_APP_API_URL}/api/v1/reviews/favorites`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -121,6 +105,9 @@ const Home = ({ menuState }: Props) => {
             </Link>
           </section>
         </section>
+        {reviews.length <= 0 && (
+          <FadeLoader height={10} width={4} color="gainsboro" />
+        )}
         <AnimatePresence>
           <motion.section
             className="home--reviews"

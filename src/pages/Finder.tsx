@@ -22,7 +22,6 @@ const Finder = ({ menuState }: Props) => {
 
   const fetchLocation = () => {
     if (routeId) {
-      console.log("looking for: ", userInput);
       setLoading(true);
       fetch(`${REACT_APP_API_URL}/api/v1/routes/location`, {
         method: "POST",
@@ -135,8 +134,6 @@ const Finder = ({ menuState }: Props) => {
     const { value } = e.target;
     setUserInput(value);
   };
-
-  console.log("");
 
   return (
     <div className="container" style={{ zIndex: menuState ? "-1" : "0" }}>

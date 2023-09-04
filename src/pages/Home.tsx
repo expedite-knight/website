@@ -31,7 +31,7 @@ const Home = ({ menuState }: Props) => {
   const control = useAnimation();
   const [ref, inView] = useInView();
   const [moreReviewsButtonHover, setMoreReviewsButtonHover] = useState(false);
-  const [reviews, setReviews] = useState<[ReviewType] | []>([]);
+  const [reviews, setReviews] = useState<[ReviewType] | [] | null>(null);
 
   useEffect(() => {
     fetch(`${REACT_APP_API_URL}/api/v1/reviews/favorites`, {
@@ -105,9 +105,14 @@ const Home = ({ menuState }: Props) => {
             </Link>
           </section>
         </section>
-        {reviews?.length <= 0 && (
+        {!reviews ? (
           <FadeLoader height={10} width={4} color="gainsboro" />
-        )}
+        ) : null}
+        {reviews && reviews.length <= 0 ? (
+          <p style={{ color: "gray" }}>
+            Submit a review for a chance to be featured!
+          </p>
+        ) : null}
         <AnimatePresence>
           <motion.section
             className="home--reviews"
@@ -120,7 +125,8 @@ const Home = ({ menuState }: Props) => {
             key="reviews"
             ref={ref}
           >
-            {reviews.map((review, index) => {
+            {reviews?.map((review, index) => {
+              console.log("review: ", review.updatedAt);
               return (
                 <div className="home--review" key={index}>
                   <h1>{review.anon ? "Anonymous" : review.name}</h1>
@@ -150,7 +156,7 @@ const Home = ({ menuState }: Props) => {
                     <p className="home--review-body">{review.body}</p>
                   ) : null}
                   <small className="home--review-date">
-                    {moment().format("ll")}
+                    {moment(review.updatedAt).format("ll")}
                   </small>
                 </div>
               );

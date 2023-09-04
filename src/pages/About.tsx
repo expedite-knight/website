@@ -89,8 +89,9 @@ const About = ({ menuState }: Props) => {
             }}
           ></div>
           <p className="about--bio">
-            My name is Kai and I am a recent Illinois State University grad who
-            now builds applications full time.
+            My name is Kai and I am a recent Illinois State University grad. I
+            develope, test and maintain the Expedite Knight website and mobile
+            app we use to track your deliveries.
           </p>
         </section>
       </section>

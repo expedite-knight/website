@@ -39,10 +39,10 @@ const Help = ({ menuState }: Props) => {
             }}
           ></div>
           <p className="help--body">
-            You can sign up for SMS by texting "verify" to +1 704-686-8257 and
-            that will allow UpdateMe to send you an updated ETA at set intervals
-            giving you a real time estimate of when you should expect your
-            package to arrive
+            You can sign up for SMS by texting "verify" to +1 704-686-8257, that
+            will allow us to send you an updated ETA at set intervals giving you
+            a real time estimate of when you should expect your delivery to
+            arrive
           </p>
         </section>
         <div
@@ -64,7 +64,8 @@ const Help = ({ menuState }: Props) => {
           ></div>
           <p className="help--body">
             If you think you have been added to a route by mistake you can send
-            the route id to the same number you got the activated SMS from
+            the route id to the same number you got the route activation SMS
+            from
           </p>
         </section>
         <div
@@ -86,7 +87,7 @@ const Help = ({ menuState }: Props) => {
           ></div>
           <p className="help--body">
             If you no longer want to receive SMS updates you can text "unverify"
-            to the same number you have been receiving the updates from
+            to the same number you have been receiving updates from
           </p>
         </section>
         <div

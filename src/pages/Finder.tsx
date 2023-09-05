@@ -106,7 +106,8 @@ const Finder = ({ menuState }: Props) => {
       })
         .then((res) => res.json())
         .then(async (data) => {
-          if (data.status === 200) {
+          if (data.status === 200 && data.body.route.active) {
+            setNotFound(false);
             setMapQuery(
               `directions?key=${REACT_APP_GOOGLE_API_KEY}&origin=${
                 data.body.route.activeLocation.lat
@@ -118,15 +119,36 @@ const Finder = ({ menuState }: Props) => {
               )}&zoom=10`
             );
             setIsActive(true);
+            if (data.body.route.deliveryMode) setDeliveryMode(true);
+            else setDeliveryMode(false);
+
+            if (data.body.route.delivered) setDelivered(true);
+            else setDelivered(false);
+
+            //route is found but not active
+          } else if (data.status === 200 && !data.body.route.active) {
+            setNotFound(false);
+            setMapQuery(
+              `place?key=${REACT_APP_GOOGLE_API_KEY}&q=${data.body.route.destination.replaceAll(
+                " ",
+                "+"
+              )}`
+            );
+            if (data.body.route.deliveryMode) setDeliveryMode(true);
+            else setDeliveryMode(false);
+
+            if (data.body.route.delivered) setDelivered(true);
+            else setDelivered(false);
           } else {
+            setNotFound(true);
             setMapQuery(
               `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
             );
-            setIsActive(false);
           }
           setLoading(false);
         })
         .catch((error) => {
+          //bad request
           console.log("ERROR:", error);
           setMapQuery(
             `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`

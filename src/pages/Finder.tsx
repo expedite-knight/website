@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import CustomButton from "../components/CustomButton";
 import "../styles/finder.css";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -12,13 +12,16 @@ const Finder = ({ menuState }: Props) => {
   const [routeId, setRouteId] = useState<string | null>(null);
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [delivered, setDelivered] = useState(false);
+  const [deliveryMode, setDeliveryMode] = useState(false);
   const { REACT_APP_API_URL, REACT_APP_GOOGLE_API_KEY } = process.env;
   const queryParams = new URLSearchParams(window.location.search);
   const [mapQuery, setMapQuery] = useState(
     `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
   );
+  const [statusElement, setStatusElement] = useState<ReactNode | null>(null);
 
   const fetchLocation = () => {
     if (routeId) {
@@ -35,7 +38,8 @@ const Finder = ({ menuState }: Props) => {
       })
         .then((res) => res.json())
         .then(async (data) => {
-          if (data.status === 200) {
+          if (data.status === 200 && data.body.route.active) {
+            setNotFound(false);
             setMapQuery(
               `directions?key=${REACT_APP_GOOGLE_API_KEY}&origin=${
                 data.body.route.activeLocation.lat
@@ -47,10 +51,28 @@ const Finder = ({ menuState }: Props) => {
               )}&zoom=10`
             );
             setIsActive(true);
-            setError(false);
+            if (data.body.route.deliveryMode) setDeliveryMode(true);
+            else setDeliveryMode(false);
+
+            if (data.body.route.delivered) setDelivered(true);
+            else setDelivered(false);
+
+            //route is found but not active
+          } else if (data.status === 200 && !data.body.route.active) {
+            setNotFound(false);
+            setMapQuery(
+              `place?key=${REACT_APP_GOOGLE_API_KEY}&q=${data.body.route.destination.replaceAll(
+                " ",
+                "+"
+              )}`
+            );
+            if (data.body.route.deliveryMode) setDeliveryMode(true);
+            else setDeliveryMode(false);
+
+            if (data.body.route.delivered) setDelivered(true);
+            else setDelivered(false);
           } else {
-            setError(true);
-            setIsActive(false);
+            setNotFound(true);
             setMapQuery(
               `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
             );
@@ -58,8 +80,8 @@ const Finder = ({ menuState }: Props) => {
           setLoading(false);
         })
         .catch((error) => {
+          //bad request
           console.log("ERROR:", error);
-          setError(true);
           setMapQuery(
             `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
           );
@@ -67,6 +89,8 @@ const Finder = ({ menuState }: Props) => {
           setLoading(false);
           setRouteId(null);
         });
+
+      //MAKE SURE TO CHANGE THIS TO MIRROR THE TOP PART AFTER YOU CHANGE IT
     } else if (queryParams.has("route")) {
       setRouteId(queryParams.get("route"));
       setLoading(true);
@@ -94,12 +118,10 @@ const Finder = ({ menuState }: Props) => {
               )}&zoom=10`
             );
             setIsActive(true);
-            setError(false);
           } else {
             setMapQuery(
               `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
             );
-            setError(true);
             setIsActive(false);
           }
           setLoading(false);
@@ -109,7 +131,6 @@ const Finder = ({ menuState }: Props) => {
           setMapQuery(
             `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
           );
-          setError(true);
           setIsActive(false);
           setLoading(false);
           setRouteId(null);
@@ -121,19 +142,84 @@ const Finder = ({ menuState }: Props) => {
     if (routeId || queryParams.has("route")) {
       fetchLocation();
     }
+
     const interval = setInterval(() => {
-      if (!error && routeId) {
+      if (isActive && routeId) {
         fetchLocation();
       }
     }, 10000);
 
-    return () => clearInterval(interval);
-  }, [routeId, error]);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [routeId, isActive]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setUserInput(value);
   };
+
+  useEffect(() => {
+    if (routeId) {
+      if (notFound) {
+        setStatusElement(
+          <h4
+            style={{
+              color: "gray",
+              background: "gainsboro",
+              paddingInline: 10,
+              paddingBlock: 5,
+              borderRadius: 5,
+            }}
+          >
+            Not Found
+          </h4>
+        );
+      } else if (isActive) {
+        setStatusElement(
+          <h4
+            style={{
+              color: "#03c04a",
+              background: "#AFE1AF",
+              paddingInline: 10,
+              paddingBlock: 5,
+              borderRadius: 5,
+            }}
+          >
+            {deliveryMode ? "En Route" : "Active"}
+          </h4>
+        );
+      } else if (!isActive && delivered && deliveryMode) {
+        setStatusElement(
+          <h4
+            style={{
+              color: "#0096FF",
+              background: "#ADD8E6",
+              paddingInline: 10,
+              paddingBlock: 5,
+              borderRadius: 5,
+            }}
+          >
+            Delivered
+          </h4>
+        );
+      } else {
+        setStatusElement(
+          <h4
+            style={{
+              color: "#de3623",
+              background: "pink",
+              paddingInline: 10,
+              paddingBlock: 5,
+              borderRadius: 5,
+            }}
+          >
+            Inactive
+          </h4>
+        );
+      }
+    }
+  }, [routeId, delivered, deliveryMode, isActive, notFound]);
 
   return (
     <div className="container" style={{ zIndex: menuState ? "-1" : "0" }}>
@@ -169,9 +255,6 @@ const Finder = ({ menuState }: Props) => {
           }}
         >
           <h3 className="header">Route ID:</h3>
-          {/* <small style={{ color: "red", display: error ? "inline" : "none" }}>
-                        Unable to find route or route is inactive
-                    </small> */}
           <input
             className="input"
             placeholder="Ex: 64970caf5c13229e1adf11a0"
@@ -227,32 +310,7 @@ const Finder = ({ menuState }: Props) => {
         >
           <div className="iframe-container">
             <div className="route-status-indicator">
-              {isActive && (
-                <h4
-                  style={{
-                    color: "#03c04a",
-                    background: "#AFE1AF",
-                    paddingInline: 10,
-                    paddingBlock: 5,
-                    borderRadius: 5,
-                  }}
-                >
-                  Active
-                </h4>
-              )}
-              {!isActive && error ? (
-                <h4
-                  style={{
-                    color: "#de3623",
-                    background: "pink",
-                    paddingInline: 10,
-                    paddingBlock: 5,
-                    borderRadius: 5,
-                  }}
-                >
-                  Inactive
-                </h4>
-              ) : null}
+              {statusElement && statusElement}
             </div>
             <iframe
               title="Route location map"
@@ -263,7 +321,7 @@ const Finder = ({ menuState }: Props) => {
             ></iframe>
           </div>
         </div>
-
+        {/* <p style={{ textDecoration: "underline" }}>Click for route details</p> */}
         <div style={{ textAlign: "center" }}>
           <h3 className="subheader" style={{ fontWeight: 500 }}>
             To receive SMS updates text "verify" to +1 704-686-8257

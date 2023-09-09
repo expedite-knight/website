@@ -9,167 +9,103 @@ type Props = {
 };
 
 const Finder = ({ menuState }: Props) => {
-  const [routeId, setRouteId] = useState<string | null>(null);
-  const [userInput, setUserInput] = useState("");
+  const queryParams = new URLSearchParams(window.location.search);
+  const [routeParam, setRouteParam] = useState<null | string>(
+    queryParams.get("route")
+  );
+  const [routeId, setRouteId] = useState<string | null>(
+    routeParam ? routeParam : null
+  );
+  const [userInput, setUserInput] = useState(routeParam ? routeParam : "");
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [delivered, setDelivered] = useState(false);
   const [deliveryMode, setDeliveryMode] = useState(false);
   const { REACT_APP_API_URL, REACT_APP_GOOGLE_API_KEY } = process.env;
-  const queryParams = new URLSearchParams(window.location.search);
   const [mapQuery, setMapQuery] = useState(
     `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
   );
   const [statusElement, setStatusElement] = useState<ReactNode | null>(null);
 
-  const fetchLocation = () => {
-    if (routeId) {
-      setLoading(true);
-      fetch(`${REACT_APP_API_URL}/api/v1/routes/location`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          routeId: routeId,
-        }),
-      })
-        .then((res) => res.json())
-        .then(async (data) => {
-          if (data.status === 200 && data.body.route.active) {
-            setNotFound(false);
-            setMapQuery(
-              `directions?key=${REACT_APP_GOOGLE_API_KEY}&origin=${
-                data.body.route.activeLocation.lat
-              }%2C${
-                data.body.route.activeLocation.long
-              }&destination=${data.body.route.destination.replaceAll(
-                " ",
-                "+"
-              )}&zoom=10`
-            );
-            setIsActive(true);
-            if (data.body.route.deliveryMode) setDeliveryMode(true);
-            else setDeliveryMode(false);
+  const fetchLocation = (searchString: string) => {
+    setLoading(true);
+    fetch(`${REACT_APP_API_URL}/api/v1/routes/location`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        routeId: searchString,
+      }),
+    })
+      .then((res) => res.json())
+      .then(async (data) => {
+        if (data.status === 200 && data.body.route.active) {
+          setNotFound(false);
+          setMapQuery(
+            `directions?key=${REACT_APP_GOOGLE_API_KEY}&origin=${
+              data.body.route.activeLocation.lat
+            }%2C${
+              data.body.route.activeLocation.long
+            }&destination=${data.body.route.destination.replaceAll(
+              " ",
+              "+"
+            )}&zoom=10`
+          );
+          setIsActive(true);
+          if (data.body.route.deliveryMode) setDeliveryMode(true);
+          else setDeliveryMode(false);
 
-            if (data.body.route.delivered) setDelivered(true);
-            else setDelivered(false);
+          if (data.body.route.delivered) setDelivered(true);
+          else setDelivered(false);
 
-            //route is found but not active
-          } else if (data.status === 200 && !data.body.route.active) {
-            setNotFound(false);
-            setMapQuery(
-              `place?key=${REACT_APP_GOOGLE_API_KEY}&q=${data.body.route.destination.replaceAll(
-                " ",
-                "+"
-              )}`
-            );
-            if (data.body.route.deliveryMode) setDeliveryMode(true);
-            else setDeliveryMode(false);
+          //route is found but not active
+        } else if (data.status === 200 && !data.body.route.active) {
+          setIsActive(false);
+          setNotFound(false);
+          setMapQuery(
+            `place?key=${REACT_APP_GOOGLE_API_KEY}&q=${data.body.route.destination.replaceAll(
+              " ",
+              "+"
+            )}`
+          );
+          if (data.body.route.deliveryMode) setDeliveryMode(true);
+          else setDeliveryMode(false);
 
-            if (data.body.route.delivered) setDelivered(true);
-            else setDelivered(false);
-          } else {
-            setNotFound(true);
-            setMapQuery(
-              `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
-            );
-          }
-          setLoading(false);
-        })
-        .catch((error) => {
-          //bad request
-          console.log("ERROR:", error);
+          if (data.body.route.delivered) setDelivered(true);
+          else setDelivered(false);
+        } else {
+          setIsActive(false);
+          setNotFound(true);
           setMapQuery(
             `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
           );
-          setIsActive(false);
-          setLoading(false);
-          setRouteId(null);
-        });
-
-      //MAKE SURE TO CHANGE THIS TO MIRROR THE TOP PART AFTER YOU CHANGE IT
-    } else if (queryParams.has("route")) {
-      setRouteId(queryParams.get("route"));
-      setLoading(true);
-      fetch(`${REACT_APP_API_URL}/api/v1/routes/location`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          routeId: queryParams.get("route"),
-        }),
+        }
+        setLoading(false);
       })
-        .then((res) => res.json())
-        .then(async (data) => {
-          if (data.status === 200 && data.body.route.active) {
-            setNotFound(false);
-            setMapQuery(
-              `directions?key=${REACT_APP_GOOGLE_API_KEY}&origin=${
-                data.body.route.activeLocation.lat
-              }%2C${
-                data.body.route.activeLocation.long
-              }&destination=${data.body.route.destination.replaceAll(
-                " ",
-                "+"
-              )}&zoom=10`
-            );
-            setIsActive(true);
-            if (data.body.route.deliveryMode) setDeliveryMode(true);
-            else setDeliveryMode(false);
-
-            if (data.body.route.delivered) setDelivered(true);
-            else setDelivered(false);
-
-            //route is found but not active
-          } else if (data.status === 200 && !data.body.route.active) {
-            setNotFound(false);
-            setMapQuery(
-              `place?key=${REACT_APP_GOOGLE_API_KEY}&q=${data.body.route.destination.replaceAll(
-                " ",
-                "+"
-              )}`
-            );
-            if (data.body.route.deliveryMode) setDeliveryMode(true);
-            else setDeliveryMode(false);
-
-            if (data.body.route.delivered) setDelivered(true);
-            else setDelivered(false);
-          } else {
-            setNotFound(true);
-            setMapQuery(
-              `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
-            );
-          }
-          setLoading(false);
-        })
-        .catch((error) => {
-          //bad request
-          console.log("ERROR:", error);
-          setMapQuery(
-            `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
-          );
-          setIsActive(false);
-          setLoading(false);
-          setRouteId(null);
-        });
-    }
+      .catch((error) => {
+        //bad request
+        console.log("ERROR:", error);
+        setMapQuery(
+          `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
+        );
+        setIsActive(false);
+        setLoading(false);
+        setRouteId(null);
+      });
   };
 
   useEffect(() => {
-    if (routeId || queryParams.has("route")) {
-      fetchLocation();
-    }
+    if (routeId) fetchLocation(routeId);
 
     const interval = setInterval(() => {
       if (isActive && routeId) {
-        fetchLocation();
+        console.log("isActive: ", isActive, "route id: ", routeId);
+        fetchLocation(routeId!);
       }
-    }, 10000);
+    }, 5000);
 
     return () => {
       clearInterval(interval);
@@ -290,6 +226,7 @@ const Finder = ({ menuState }: Props) => {
               onClick={() => {
                 if (userInput.trim() !== "") {
                   setRouteId(userInput);
+                  setRouteParam(null);
                 } else {
                   setRouteId(null);
                 }
@@ -309,6 +246,7 @@ const Finder = ({ menuState }: Props) => {
               background={"#d92323"}
               onClick={() => {
                 if (userInput.trim() !== "") {
+                  fetchLocation(userInput);
                   setRouteId(userInput);
                 } else {
                   setRouteId(null);

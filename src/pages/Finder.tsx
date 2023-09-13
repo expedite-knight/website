@@ -3,6 +3,7 @@ import CustomButton from "../components/CustomButton";
 import "../styles/finder.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { motion, AnimatePresence } from "framer-motion";
+import Popup from "../components/Popup";
 
 type Props = {
   menuState: boolean;
@@ -20,6 +21,7 @@ const Finder = ({ menuState }: Props) => {
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [delivered, setDelivered] = useState(false);
   const [deliveryMode, setDeliveryMode] = useState(false);
   const { REACT_APP_API_URL, REACT_APP_GOOGLE_API_KEY } = process.env;
@@ -27,6 +29,7 @@ const Finder = ({ menuState }: Props) => {
     `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
   );
   const [statusElement, setStatusElement] = useState<ReactNode | null>(null);
+  const [popupState, setPopupState] = useState(false);
 
   const fetchLocation = (searchString: string) => {
     setLoading(true);
@@ -44,17 +47,28 @@ const Finder = ({ menuState }: Props) => {
       .then(async (data) => {
         if (data.status === 200 && data.body.route.active) {
           setNotFound(false);
-          setMapQuery(
-            `directions?key=${REACT_APP_GOOGLE_API_KEY}&origin=${
-              data.body.route.activeLocation.lat
-            }%2C${
-              data.body.route.activeLocation.long
-            }&destination=${data.body.route.destination.replaceAll(
-              " ",
-              "+"
-            )}&zoom=10`
-          );
+          setPaused(data.body.route.paused);
           setIsActive(true);
+
+          if (!data.body.route.paused) {
+            setMapQuery(
+              `directions?key=${REACT_APP_GOOGLE_API_KEY}&origin=${
+                data.body.route.activeLocation.lat
+              }%2C${
+                data.body.route.activeLocation.long
+              }&destination=${data.body.route.destination.replaceAll(
+                " ",
+                "+"
+              )}&zoom=10`
+            );
+          } else {
+            setMapQuery(
+              `place?key=${REACT_APP_GOOGLE_API_KEY}&q=${data.body.route.destination.replaceAll(
+                " ",
+                "+"
+              )}`
+            );
+          }
           if (data.body.route.deliveryMode) setDeliveryMode(true);
           else setDeliveryMode(false);
 
@@ -92,8 +106,8 @@ const Finder = ({ menuState }: Props) => {
           `place?key=${REACT_APP_GOOGLE_API_KEY}&q=United+States+Of+America`
         );
         setIsActive(false);
-        setLoading(false);
-        setRouteId(null);
+        setNotFound(true);
+        setPopupState(true);
       });
   };
 
@@ -131,6 +145,20 @@ const Finder = ({ menuState }: Props) => {
             }}
           >
             Not Found
+          </h4>
+        );
+      } else if (paused) {
+        setStatusElement(
+          <h4
+            style={{
+              color: "#FFC30B",
+              background: "#FFE992",
+              paddingInline: 10,
+              paddingBlock: 5,
+              borderRadius: 5,
+            }}
+          >
+            Paused
           </h4>
         );
       } else if (isActive) {
@@ -181,6 +209,11 @@ const Finder = ({ menuState }: Props) => {
 
   return (
     <div className="container" style={{ zIndex: menuState ? "-1" : "0" }}>
+      <Popup
+        message="Something went wrong.. Try again later"
+        enabled={popupState}
+        background="red"
+      />
       <section className="img-container">
         <img
           src="https://img.freepik.com/free-vector/hand-drawn-flat-design-international-trade_23-2149154534.jpg?w=1480&t=st=1689302926~exp=1689303526~hmac=484e32200f4c3d919d1465309ef3026157c143183adf06642af28cb802586c98"

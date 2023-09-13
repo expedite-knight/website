@@ -1,1 +1,3 @@
-
+.route-status-indicator{
+    font-size: clamp(1em, 2vw, 1.5em);
+}

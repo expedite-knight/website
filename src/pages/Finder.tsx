@@ -56,10 +56,7 @@ const Finder = ({ menuState }: Props) => {
                 data.body.route.activeLocation.lat
               }%2C${
                 data.body.route.activeLocation.long
-              }&destination=${data.body.route.destination.replaceAll(
-                " ",
-                "+"
-              )}&zoom=10`
+              }&destination=${data.body.route.destination.replaceAll(" ", "+")}`
             );
           } else {
             setMapQuery(

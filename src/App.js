@@ -12,6 +12,7 @@ import Error from "./pages/Error";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Redirect from "./components/Redirect";
 import Reviews from "./pages/Reviews";
+import RouteDetails from "./pages/RouteDetails";
 
 function App() {
   const [menuState, setMenuState] = useState(false);
@@ -91,6 +92,10 @@ function App() {
             <Route
               path="/reviews"
               element={<Reviews menuState={menuState} />}
+            />
+            <Route
+              path="/route"
+              element={<RouteDetails menuState={menuState} />}
             />
             <Route path="/*" element={<Error menuState={menuState} />} />
           </Routes>

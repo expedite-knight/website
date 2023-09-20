@@ -207,7 +207,7 @@ const Finder = ({ menuState }: Props) => {
   return (
     <div className="container" style={{ zIndex: menuState ? "-1" : "0" }}>
       <Popup
-        message="Something went wrong.. Try again later"
+        message="Something went wrong... Try again later"
         enabled={popupState}
         background="red"
       />
@@ -311,7 +311,11 @@ const Finder = ({ menuState }: Props) => {
             ></iframe>
           </div>
         </div>
-        {/* <p style={{ textDecoration: "underline" }}>Click for route details</p> */}
+        {!notFound && routeId && (
+          <a className="details-link" href={`/route?id=${routeId}`}>
+            Click for route details
+          </a>
+        )}
         <div style={{ textAlign: "center" }}>
           <h3 className="subheader" style={{ fontWeight: 500 }}>
             To receive SMS updates text "verify" to +1 704-686-8257

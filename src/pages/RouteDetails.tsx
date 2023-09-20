@@ -49,8 +49,6 @@ const RouteDetails = ({ menuState }: Props) => {
       });
   }, []);
 
-  console.log("res: ", routeDetails);
-
   return (
     <div className="container" style={{ zIndex: menuState ? "-1" : "0" }}>
       <section className="img-container">
@@ -88,13 +86,13 @@ const RouteDetails = ({ menuState }: Props) => {
           <p>
             {" "}
             <span style={{ fontWeight: 600, textDecoration: "underline" }}>
-              To:
+              Destination:
             </span>{" "}
             {routeDetails?.destination}
           </p>
           <p>
             <span style={{ fontWeight: 600, textDecoration: "underline" }}>
-              Left:
+              Departed:
             </span>{" "}
             {moment(routeDetails?.lastActivatedAt).format(
               "MMM Do YYYY, h:mm:ss a"
@@ -127,6 +125,14 @@ const RouteDetails = ({ menuState }: Props) => {
                 Core returned:
               </span>{" "}
               {routeDetails?.coreReturned ? "Yes" : "No"}
+            </p>
+          )}
+          {routeDetails?.delivered && routeDetails?.coreReturned && (
+            <p>
+              <span style={{ fontWeight: 600, textDecoration: "underline" }}>
+                Core return address:
+              </span>{" "}
+              1040 Derita Rd Concord NC 28027
             </p>
           )}
         </section>

@@ -1,3 +1,18 @@
+ol{
+    all: unset;
+    padding-inline: 10%;
+}
+li{
+    all: unset;
+    font-size: 20px;
+    text-decoration: none;
+    list-style-type: none;
+    color: rgb(72, 72, 72);
+}
+.strong {
+    font-weight: bold;
+    color: black;
+}
 .home--cards {
     display: flex;
     justify-content: center;
@@ -86,6 +101,9 @@
     }
     .home--logo {
         width: 80%;
+    }
+    li{
+        font-size: 16px;
     }
 }
 

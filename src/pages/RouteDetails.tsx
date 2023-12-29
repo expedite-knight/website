@@ -123,7 +123,7 @@ const RouteDetails = ({ menuState }: Props) => {
             <p>
               <span style={{ fontWeight: 600, textDecoration: "underline" }}>
                 Core delivered:
-              </span>{" "}
+              </span>
               {routeDetails?.coreReturned ? "Yes" : "No"}
             </p>
           )}

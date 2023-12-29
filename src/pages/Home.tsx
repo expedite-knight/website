@@ -105,6 +105,46 @@ const Home = ({ menuState }: Props) => {
             </Link>
           </section>
         </section>
+        <section>
+          <ol
+            style={{
+              display: "flex",
+              gap: 20,
+              flexDirection: "column",
+              padding: "none",
+            }}
+          >
+            <li>
+              <span className="strong">White Glove delivery:</span> This means
+              exceptional care of the equipment we are entrusted with for
+              transport. From pick-up to delivery your equipment is handled with
+              an appreciation of its value and delicacy.
+            </li>
+            <li>
+              <span className="strong">Experience:</span> Years of training and
+              practical experience in maintenance and repair of high value
+              complex medical devices provides us with the background neccessary
+              to fully understand your transport needs.
+            </li>
+            <li>
+              <span className="strong">Real Time Tracking:</span> With our
+              proprietary mobile app you can follow your shipment. This allows
+              you to schedule installation and operation for maximum efficiency.
+            </li>
+            <li>
+              <span className="strong">Constant Communication:</span> Your
+              ability to directly contact the Expedite Knight team keeps you
+              aware of expected delivery times and ensures specific delivery
+              requirements are met and with our flexibility can provide last
+              minute changes to the delivery if needed.
+            </li>
+            <li>
+              <span className="strong">Our Goal:</span> To provide transport
+              services for your valuable equipment that prioritizes proper care,
+              safe handling and timely delivery.
+            </li>
+          </ol>
+        </section>
         {!reviews ? (
           <FadeLoader height={10} width={4} color="gainsboro" />
         ) : null}
